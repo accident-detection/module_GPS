@@ -75,7 +75,7 @@ void displayInfo()
   if (gps.time.isValid())
   {
     if (gps.time.hour() < 10) Serial.print(F("0"));
-    Serial.print(gps.time.hour());
+    Serial.print(gps.time.hour() + 1);
     Serial.print(F(":"));
     if (gps.time.minute() < 10) Serial.print(F("0"));
     Serial.print(gps.time.minute());
@@ -116,6 +116,19 @@ void displayInfo()
   else
   {
      Serial.print("[VISINA NIJE DOSTUPNA]");
+  }
+  
+  Serial.print(F("  "));
+  
+  // Jacina signala
+  if(gps.hdop.isValid())
+  {
+     Serial.print("Jacina signala (HDOP): ");
+     Serial.print(gps.hdop.value()); 
+  }
+  else
+  {
+     Serial.print("[JACINA SIGNALA NIJE DOSTUPNA]"); 
   }
 
   Serial.println();
