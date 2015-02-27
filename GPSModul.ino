@@ -1,14 +1,13 @@
-#include <TinyGPS++.h>
-#include <SoftwareSerial.h>
+#include <TinyGPS++.h> // Biblioteka za GPS
+#include <SoftwareSerial.h> // Biblioteka za dodatnu serijsku kominkaciju
+#include <SPI.h> // Biblioteka (Serial Peripheral Interface) za komunikaciju SD kartice
+#include <SD.h> // Biblioteka za SD karticu
 
-static const int RXPin = 4, TXPin = 3;
+static const int RXPin = 4, TXPin = 3; // TX i RX pinovi za GPS, spojiti TX-RX, RX-TX
 static const unsigned long GPSBaud = 9600;
-
-// Instanca TinyGPS objekta
-TinyGPSPlus gps;
-
-// Serija sa GPS modulom
-SoftwareSerial ss(RXPin, TXPin);
+TinyGPSPlus gps; // Instanca TinyGPS objekta
+SoftwareSerial ss(RXPin, TXPin); // Serija sa GPS modulom
+int chipSelect = 2; // CS pin SD kartice je spojen na pin 2
 
 void setup()
 {
