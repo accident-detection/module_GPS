@@ -4,10 +4,11 @@
 #include <SD.h> // Biblioteka za SD karticu
 
 static const int RXPin = 4, TXPin = 3; // TX i RX pinovi za GPS, spojiti TX-RX, RX-TX
-static const unsigned long GPSBaud = 9600;
+static const unsigned long GPSBaud = 9600; // GPS radi na 9600 bauda
 TinyGPSPlus gps; // Instanca TinyGPS objekta
 SoftwareSerial ss(RXPin, TXPin); // Serija sa GPS modulom
 int chipSelect = 2; // CS pin SD kartice je spojen na pin 2
+File sdCardObject; // Varijabla za manipuliranje SD karticom
 
 void setup()
 {
@@ -20,24 +21,41 @@ void setup()
   Serial.println(F("Testiranje GPS modula"));
   Serial.print(F("TinyGPS++ biblioteka u verziji ")); Serial.println(TinyGPSPlus::libraryVersion());
   Serial.println();
+  
+  pinMode(10, OUTPUT); // Pin 10 mora biti zauzet za SD modul
+  SD.begin(chipSelect); // Inicijaliziramo SD karticu i dodijelimo pin
+  
+  if(SD.exists("gpsData.txt")){ // Ako postoji gpsData.txt, izbrisat cemo ga i pisati nanovo
+    SD.remove("gpsData.txt");
+  }
 }
 
 void loop()
 {
   // Nakon svake NMEA recenice ispisuju se podaci
-  while (ss.available() > 0)
-    if (gps.encode(ss.read()))
-      displayInfo();
+  while (ss.available() > 0){
+    if (gps.encode(ss.read())){
+        displayInfo();
+        
+        if(gps.location.isValid()){ // Zapisujemo samo ako imamo koordinate
+            sdCardObject = SD.open("gpsData.txt", FILE_WRITE); // Otvaramo gpsData za PISANJE
+            sdCardObject.print(gps.location.lat(), 6);
+            sdCardObject.print(F(","));
+            sdCardObject.print(gps.location.lng(), 6);
+            sdCardObject.println();
+            sdCardObject.close();
+        }
+      }
+  }
 
   if (millis() > 5000 && gps.charsProcessed() < 10)
   {
     Serial.println(F("Veza sa GPS modulom nije uspostavljena."));
-    while(true);
+    while(true){};
   }
 }
 
-// Funkcija za ispis podataka
-void displayInfo()
+void displayInfo() // Funkcija za ispis podataka
 {
   // Koordinate
   Serial.print(F("Lokacija: ")); 
