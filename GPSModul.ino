@@ -38,11 +38,11 @@ void loop()
         displayInfo();
         
         if(gps.location.isValid()){ // Zapisujemo samo ako imamo koordinate
-            sdCardObject = SD.open("gpsData.txt", FILE_WRITE); // Otvaramo gpsData za PISANJE
-            sdCardObject.print(gps.location.lat(), 6);
-            sdCardObject.print(F(","));
+            sdCardObject = SD.open("gpsData.txt", FILE_WRITE); // Otvaramo gpsData za pisanje
             sdCardObject.print(gps.location.lng(), 6);
-            sdCardObject.println();
+            sdCardObject.print(",");
+            sdCardObject.print(gps.location.lat(), 6);
+            sdCardObject.print(" ");
             sdCardObject.close();
         }
       }
