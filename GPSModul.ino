@@ -32,19 +32,15 @@ void setup()
 
 void loop()
 {
+  startGPS();
+}
+
+void startGPS(){
   // Nakon svake NMEA recenice ispisuju se podaci
   while (ss.available() > 0){
     if (gps.encode(ss.read())){
         displayInfo();
-        
-        if(gps.location.isValid()){ // Zapisujemo samo ako imamo koordinate
-            sdCardObject = SD.open("gpsData.txt", FILE_WRITE); // Otvaramo gpsData za pisanje
-            sdCardObject.print(gps.location.lng(), 6);
-            sdCardObject.print(",");
-            sdCardObject.print(gps.location.lat(), 6);
-            sdCardObject.print(" ");
-            sdCardObject.close();
-        }
+        writeToSD();
       }
   }
 
@@ -53,6 +49,17 @@ void loop()
     Serial.println(F("Veza sa GPS modulom nije uspostavljena."));
     while(true){};
   }
+}
+
+void writeToSD(){
+  if(gps.location.isValid()){ // Zapisujemo samo ako imamo koordinate
+            sdCardObject = SD.open("gpsData.txt", FILE_WRITE); // Otvaramo gpsData za pisanje
+            sdCardObject.print(gps.location.lng(), 6);
+            sdCardObject.print(",");
+            sdCardObject.print(gps.location.lat(), 6);
+            sdCardObject.print(" ");
+            sdCardObject.close();
+        }
 }
 
 void displayInfo() // Funkcija za ispis podataka
