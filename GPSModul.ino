@@ -25,8 +25,12 @@ void setup()
   pinMode(10, OUTPUT); // Pin 10 mora biti zauzet za SD modul
   SD.begin(chipSelect); // Inicijaliziramo SD karticu i dodijelimo pin
   
-  if(SD.exists("gpsData.txt")){ // Ako postoji gpsData.txt, izbrisat cemo ga i pisati nanovo
-    SD.remove("gpsData.txt");
+  if(SD.exists("gpsTxtData.txt")){ // Ako postoji gpsData.txt, izbrisat cemo ga i pisati nanovo
+    SD.remove("gpsTxtData.txt");
+  }
+  
+  if(SD.exists("gpsCSVData.csv")){ // Ako postoji gspCSVData.csv, izbrisi i ponovo napravi
+   SD.remove("gpsCSVData.csv"); 
   }
 }
 
@@ -40,7 +44,7 @@ void startGPS(){
   while (ss.available() > 0){
     if (gps.encode(ss.read())){
         displayInfo();
-        writeToSD();
+        writeTXTToSD();
       }
   }
 
@@ -51,15 +55,29 @@ void startGPS(){
   }
 }
 
-void writeToSD(){
+void writeTXTToSD(){
   if(gps.location.isValid()){ // Zapisujemo samo ako imamo koordinate
-            sdCardObject = SD.open("gpsData.txt", FILE_WRITE); // Otvaramo gpsData za pisanje
-            sdCardObject.print(gps.location.lng(), 6);
-            sdCardObject.print(",");
-            sdCardObject.print(gps.location.lat(), 6);
-            sdCardObject.print(" ");
-            sdCardObject.close();
-        }
+    sdCardObject = SD.open("gpsTxtData.txt", FILE_WRITE); // Otvaramo gpsData.txt za pisanje
+    sdCardObject.print(gps.location.lng(), 6);
+    sdCardObject.print(",");
+    sdCardObject.print(gps.location.lat(), 6);
+    sdCardObject.print(" ");
+    sdCardObject.close();
+    }
+}
+
+void writeCSVToSD(){
+  if(gps.location.isValid()){
+    sdCardObject = SD.open("gpsCSVData.csv", FILE_WRITE); // Otvaramo gpsCSVData.csv za pisanje
+    sdCardObject.print(gps.location.lng(), 6);
+    sdCardObject.print(";");
+    sdCardObject.print(gps.location.lat(), 6);
+    sdCardObject.print(";");
+    sdCardObject.print(gps.speed.kmph());
+    sdCardObject.print(";");
+    sdCardObject.print(gps.altitude.meters());
+    sdCardObject.print(";");
+  }
 }
 
 void displayInfo() // Funkcija za ispis podataka
