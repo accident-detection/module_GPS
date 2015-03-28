@@ -12,3 +12,6 @@ When setting your .kml file, if you find that the route isn't shown properly, yo
 * **Relative to ground** - When this option is selected, altitude of the placemark is relative to the actual ground elevation of the view. For example, if you set 9 meters as the altitude of a placemark in Venice, Italy, the elevation of the placemark will be 9 meters above the ground because Venice is at sea level. However, if you set the same placemark above Denver, Colorado, the elevation of the placemark will be 1616 meters, because the elevation of Denver is 1607 meters. You can see this how this appears in the 3D viewer by setting elevation, tilting the view, and turning terrain on and off.
 * **Relative to sea floor** - Again this option is very similiar to Relative to ground but the placemark is relative to the sea floor instead of the actual ground evelation of the view.
 * **Absolute** - When this option is selected, altitude of the Placemark is above sea level. In the example above, if you have terrain on and keep altitude to 9 meters but set the altitude type to 'Absolute', the icon would disappear from view because it is actually below the level of the terrain at Denver, Colorado. You can adjust the altitude using the slider or by entering a value in meters in the 'Altitude' field.
+
+**Sample GPS Data**
+![Sample GPS Data](http://i.imgur.com/vrpkQ6o.jpg)
