@@ -14,7 +14,7 @@
 <LineString>
 <extrude>1</extrude>
 <tesselate>1</tesselate>
-<altitudeMode>absolute</altitudeMode>
+<altitudeMode>Relative to ground</altitudeMode>
 <coordinates>
 
 </coordinates>
